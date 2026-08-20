@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Propostas - Grupo Jolog</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Gerador de Propostas Comerciais</h1>
+    <p class="subtitle">Grupo Jolog</p>
+  </header>
+
+  <main>
+    <section class="cliente-info">
+      <label>Nome do Condomínio / Cliente</label>
+      <input type="text" id="clienteNome" placeholder="Ex: Residencial Flora">
+    </section>
+
+    <section class="servicos">
+      <div class="servicos-header">
+        <h2>Serviços</h2>
+        <button id="btnAddServico" type="button">+ Adicionar serviço</button>
+      </div>
+
+      <table id="tabelaServicos">
+        <thead>
+          <tr>
+            <th>Função</th>
+            <th>Quantidade</th>
+            <th>Valor (R$)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="corpoServicos">
+          <!-- linhas inseridas via JS -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td id="totalQtd">0</td>
+            <td id="totalValor">R$ 0,00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <button id="btnGerar" type="button" class="btn-gerar">Gerar Proposta (.pptx)</button>
+    <p id="status"></p>
+  </main>
+
+  <!-- JSZip via CDN: biblioteca que lê/edita o .pptx (que é um .zip) direto no navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="js/pptxEditor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

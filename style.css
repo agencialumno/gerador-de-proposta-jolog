@@ -1,0 +1,85 @@
+:root {
+  --vinho: #a3123a;
+  --cinza: #4d4d4d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+  color: var(--cinza);
+}
+
+header {
+  background: var(--vinho);
+  color: white;
+  padding: 24px 32px;
+}
+
+header h1 { margin: 0; font-size: 1.6rem; }
+.subtitle { margin: 4px 0 0; opacity: 0.85; }
+
+main {
+  max-width: 900px;
+  margin: 24px auto;
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.cliente-info { margin-bottom: 24px; }
+.cliente-info label { display: block; font-weight: bold; margin-bottom: 6px; }
+.cliente-info input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+
+.servicos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#btnAddServico {
+  background: var(--vinho);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th, td { padding: 8px; border-bottom: 1px solid #e0e0e0; text-align: left; }
+th { background: var(--vinho); color: white; }
+tfoot td { background: #f0f0f0; font-weight: bold; }
+
+select, input[type="number"], input[type="text"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.btn-remover {
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-gerar {
+  margin-top: 24px;
+  background: var(--vinho);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+#status { margin-top: 12px; font-weight: bold; }
