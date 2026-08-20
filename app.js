@@ -21,6 +21,9 @@ function formatarBRLExibicao(valor) {
 }
 
 function criarLinhaServico() {
+  const linhaVazia = corpoServicos.querySelector(".linha-vazia");
+  if (linhaVazia) linhaVazia.remove();
+
   const tr = document.createElement("tr");
 
   const tdFuncao = document.createElement("td");
@@ -66,6 +69,7 @@ function criarLinhaServico() {
   btnRemover.className = "btn-remover";
   btnRemover.addEventListener("click", () => {
     tr.remove();
+    if (!corpoServicos.querySelector("tr")) renderEstadoVazio();
     atualizarTotal();
   });
   tdRemover.appendChild(btnRemover);
@@ -95,6 +99,7 @@ function atualizarTotal() {
   let totalValor = 0;
 
   corpoServicos.querySelectorAll("tr").forEach((tr) => {
+    if (tr.classList.contains("linha-vazia")) return;
     const inputs = tr.querySelectorAll('input[type="number"]');
     const quantidade = parseFloat(inputs[0]?.value) || 0;
     const valorUnit = parseFloat(inputs[1]?.value) || 0;
@@ -109,6 +114,7 @@ function atualizarTotal() {
 function coletarServicos() {
   const servicos = [];
   corpoServicos.querySelectorAll("tr").forEach((tr) => {
+    if (tr.classList.contains("linha-vazia")) return;
     const select = tr.querySelector("select");
     const inputCustom = tr.querySelector('input[type="text"]');
     const inputs = tr.querySelectorAll('input[type="number"]');
@@ -163,5 +169,14 @@ document.getElementById("btnGerar").addEventListener("click", async () => {
   }
 });
 
-// Linha inicial
-criarLinhaServico();
+function renderEstadoVazio() {
+  corpoServicos.innerHTML = `
+    <tr class="linha-vazia">
+      <td colspan="4" class="empty-state">
+        Nenhum serviço adicionado ainda. Clique em <strong>+ Adicionar serviço</strong> para começar.
+      </td>
+    </tr>`;
+}
+
+// Começa sem nenhum serviço, mostrando a instrução de estado vazio
+renderEstadoVazio();
