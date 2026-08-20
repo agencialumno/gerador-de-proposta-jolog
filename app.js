@@ -20,6 +20,15 @@ function formatarBRLExibicao(valor) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function renderEstadoVazio() {
+  corpoServicos.innerHTML = `
+    <tr class="linha-vazia">
+      <td colspan="4" class="empty-state">
+        Nenhum serviço adicionado ainda. Clique em <strong>+ Adicionar serviço</strong> para começar.
+      </td>
+    </tr>`;
+}
+
 function criarLinhaServico() {
   const linhaVazia = corpoServicos.querySelector(".linha-vazia");
   if (linhaVazia) linhaVazia.remove();
@@ -133,6 +142,9 @@ function coletarServicos() {
 
 document.getElementById("btnAddServico").addEventListener("click", () => criarLinhaServico());
 
+// Guarda o modelo já baixado nessa sessão, pra não baixar de novo a cada proposta gerada
+let templateEmCache = null;
+
 document.getElementById("btnGerar").addEventListener("click", async () => {
   const statusEl = document.getElementById("status");
   const cliente = document.getElementById("clienteNome").value || "Condominio";
@@ -143,12 +155,40 @@ document.getElementById("btnGerar").addEventListener("click", async () => {
     return;
   }
 
-  statusEl.textContent = "Gerando proposta...";
-
   try {
-    const resp = await fetch(TEMPLATE_URL);
-    if (!resp.ok) throw new Error("Não foi possível carregar o modelo .pptx");
-    const templateBuffer = await resp.arrayBuffer();
+    let templateBuffer;
+
+    if (templateEmCache) {
+      templateBuffer = templateEmCache;
+      statusEl.textContent = "Montando a proposta...";
+    } else {
+      statusEl.textContent = "Carregando modelo... 0%";
+
+      const resp = await fetch(TEMPLATE_URL);
+      if (!resp.ok) throw new Error("Não foi possível carregar o modelo .pptx");
+
+      const tamanhoTotal = parseInt(resp.headers.get("Content-Length") || "0", 10);
+      const reader = resp.body.getReader();
+      const pedacos = [];
+      let recebido = 0;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        pedacos.push(value);
+        recebido += value.length;
+        if (tamanhoTotal) {
+          const pct = Math.round((recebido / tamanhoTotal) * 100);
+          statusEl.textContent = `Carregando modelo... ${pct}%`;
+        } else {
+          statusEl.textContent = `Carregando modelo... ${(recebido / 1024 / 1024).toFixed(1)}MB`;
+        }
+      }
+
+      templateBuffer = await new Blob(pedacos).arrayBuffer();
+      templateEmCache = templateBuffer;
+      statusEl.textContent = "Montando a proposta...";
+    }
 
     // gerarProposta vem de js/pptxEditor.js (carregado antes deste script no index.html)
     const blob = await gerarProposta(templateBuffer, servicos, JSZip);
@@ -168,15 +208,6 @@ document.getElementById("btnGerar").addEventListener("click", async () => {
     statusEl.textContent = "Erro: " + e.message;
   }
 });
-
-function renderEstadoVazio() {
-  corpoServicos.innerHTML = `
-    <tr class="linha-vazia">
-      <td colspan="4" class="empty-state">
-        Nenhum serviço adicionado ainda. Clique em <strong>+ Adicionar serviço</strong> para começar.
-      </td>
-    </tr>`;
-}
 
 // Começa sem nenhum serviço, mostrando a instrução de estado vazio
 renderEstadoVazio();
