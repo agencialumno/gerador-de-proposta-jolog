@@ -1,17 +1,6 @@
 // Caminho do modelo .pptx dentro do próprio repositório (GitHub Pages serve isso como arquivo estático)
 const TEMPLATE_URL = "template/modelo_proposta.pptx";
 
-// Catálogo de funções pré-cadastradas (ajuste os valores/lista conforme sua tabela real)
-const CATALOGO_SERVICOS = [
-  { funcao: "PORTEIROS DIURNOS", valorUnitario: 4894.14 },
-  { funcao: "PORTEIROS NOTURNOS", valorUnitario: 5684.72 },
-  { funcao: "AUX DE SERVIÇOS GERAIS 6X1 S/INSAL", valorUnitario: 5088.29 },
-  { funcao: "ASSISTENTE ADMINI 6X1", valorUnitario: 5659.01 },
-  { funcao: "VIGIA", valorUnitario: 0 },
-  { funcao: "JARDINAGEM", valorUnitario: 0 },
-  { funcao: "MANUTENÇÃO PREDIAL", valorUnitario: 0 },
-];
-
 const corpoServicos = document.getElementById("corpoServicos");
 const totalQtdEl = document.getElementById("totalQtd");
 const totalValorEl = document.getElementById("totalValor");
@@ -36,25 +25,10 @@ function criarLinhaServico() {
   const tr = document.createElement("tr");
 
   const tdFuncao = document.createElement("td");
-  const select = document.createElement("select");
-  CATALOGO_SERVICOS.forEach((s) => {
-    const opt = document.createElement("option");
-    opt.value = s.funcao;
-    opt.textContent = s.funcao;
-    opt.dataset.valor = s.valorUnitario;
-    select.appendChild(opt);
-  });
-  const optCustom = document.createElement("option");
-  optCustom.value = "__custom__";
-  optCustom.textContent = "Personalizado...";
-  select.appendChild(optCustom);
-  tdFuncao.appendChild(select);
-
-  const inputFuncaoCustom = document.createElement("input");
-  inputFuncaoCustom.type = "text";
-  inputFuncaoCustom.placeholder = "Nome da função";
-  inputFuncaoCustom.style.display = "none";
-  tdFuncao.appendChild(inputFuncaoCustom);
+  const inputFuncao = document.createElement("input");
+  inputFuncao.type = "text";
+  inputFuncao.placeholder = "Ex: Porteiro Diurno";
+  tdFuncao.appendChild(inputFuncao);
 
   const tdQtd = document.createElement("td");
   const inputQtd = document.createElement("input");
@@ -68,7 +42,7 @@ function criarLinhaServico() {
   inputValor.type = "number";
   inputValor.step = "0.01";
   inputValor.min = "0";
-  inputValor.value = CATALOGO_SERVICOS[0].valorUnitario;
+  inputValor.value = "0";
   tdValor.appendChild(inputValor);
 
   const tdRemover = document.createElement("td");
@@ -85,17 +59,6 @@ function criarLinhaServico() {
 
   tr.append(tdFuncao, tdQtd, tdValor, tdRemover);
 
-  select.addEventListener("change", () => {
-    if (select.value === "__custom__") {
-      inputFuncaoCustom.style.display = "inline-block";
-      inputValor.value = 0;
-    } else {
-      inputFuncaoCustom.style.display = "none";
-      const opt = select.selectedOptions[0];
-      inputValor.value = opt.dataset.valor;
-    }
-    atualizarTotal();
-  });
   inputQtd.addEventListener("input", atualizarTotal);
   inputValor.addEventListener("input", atualizarTotal);
 
@@ -124,15 +87,13 @@ function coletarServicos() {
   const servicos = [];
   corpoServicos.querySelectorAll("tr").forEach((tr) => {
     if (tr.classList.contains("linha-vazia")) return;
-    const select = tr.querySelector("select");
-    const inputCustom = tr.querySelector('input[type="text"]');
+    const inputFuncao = tr.querySelector('input[type="text"]');
     const inputs = tr.querySelectorAll('input[type="number"]');
     const quantidade = parseFloat(inputs[0]?.value) || 0;
     const valorUnit = parseFloat(inputs[1]?.value) || 0;
-    const funcao = select.value === "__custom__" ? inputCustom.value : select.value;
 
     servicos.push({
-      funcao,
+      funcao: inputFuncao.value,
       quantidade,
       valor: quantidade * valorUnit, // valor TOTAL da linha
     });
