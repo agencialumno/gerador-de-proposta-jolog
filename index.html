@@ -4,54 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gerador de Propostas - Grupo Jolog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="bg-decor"></div>
+
   <header>
-    <h1>Gerador de Propostas Comerciais</h1>
-    <p class="subtitle">Grupo Jolog</p>
+    <div class="header-inner">
+      <img src="jolog.png" alt="Grupo Jolog" class="logo">
+      <div class="header-text">
+        <h1>Gerador de Propostas</h1>
+        <p class="subtitle">Monte e baixe propostas comerciais em segundos</p>
+      </div>
+    </div>
   </header>
 
   <main>
-    <section class="cliente-info">
-      <label>Nome do Condomínio / Cliente</label>
-      <input type="text" id="clienteNome" placeholder="Ex: Residencial Flora">
-    </section>
+    <div class="card">
+      <section class="cliente-info">
+        <label for="clienteNome">Nome do Condomínio / Cliente</label>
+        <input type="text" id="clienteNome" placeholder="Ex: Residencial Flora">
+      </section>
 
-    <section class="servicos">
-      <div class="servicos-header">
-        <h2>Serviços</h2>
-        <button id="btnAddServico" type="button">+ Adicionar serviço</button>
-      </div>
+      <section class="servicos">
+        <div class="servicos-header">
+          <h2>Serviços</h2>
+          <button id="btnAddServico" type="button" class="btn-add">
+            <span class="icon">+</span> Adicionar serviço
+          </button>
+        </div>
 
-      <table id="tabelaServicos">
-        <thead>
-          <tr>
-            <th>Função</th>
-            <th>Quantidade</th>
-            <th>Valor (R$)</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="corpoServicos">
-          <!-- linhas inseridas via JS -->
-        </tbody>
-        <tfoot>
-          <tr>
-            <td><strong>Total</strong></td>
-            <td id="totalQtd">0</td>
-            <td id="totalValor">R$ 0,00</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
+        <div class="tabela-wrapper">
+          <table id="tabelaServicos">
+            <thead>
+              <tr>
+                <th>Função</th>
+                <th>Quantidade</th>
+                <th>Valor (R$)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="corpoServicos">
+              <!-- linhas inseridas via JS -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td id="totalQtd">0</td>
+                <td id="totalValor">R$ 0,00</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
 
-    <button id="btnGerar" type="button" class="btn-gerar">Gerar Proposta (.pptx)</button>
-    <p id="status"></p>
+      <button id="btnGerar" type="button" class="btn-gerar">Gerar Proposta (.pptx)</button>
+      <p id="status"></p>
+    </div>
   </main>
 
-  <!-- JSZip via CDN: biblioteca que lê/edita o .pptx (que é um .zip) direto no navegador -->
+  <footer>
+    <p>Grupo Jolog &middot; Terceirização de mão de obra</p>
+  </footer>
+
+  <!-- JSZip: biblioteca que lê/edita o .pptx (que é um .zip) direto no navegador -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="js/pptxEditor.js"></script>
   <script src="app.js"></script>
