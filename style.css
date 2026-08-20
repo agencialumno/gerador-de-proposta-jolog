@@ -84,13 +84,14 @@ main {
 .card {
   background: var(--branco);
   padding: 32px;
+  margin-top: 52px;
   border-radius: var(--radius-lg);
   box-shadow: var(--sombra);
 }
 
 .badge-ajuda {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   background: rgba(173, 13, 60, 0.08);
   color: var(--vinho-escuro);
